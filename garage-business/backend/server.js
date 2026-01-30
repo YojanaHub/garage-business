@@ -1,0 +1,1 @@
+const express=require('express');const app=express();require('dotenv').config();app.get('/',(_,res)=>res.send('OK'));app.listen(4000);
