@@ -1,4 +1,12 @@
-const cors = require("cors");const express=require('express');const app=express();app.use(
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config();
+
+const app = express();
+
+/* ---------- Middleware ---------- */
+app.use(express.json());
+app.use(
   cors({
     origin: [
       "http://localhost:5173",
@@ -7,4 +15,19 @@ const cors = require("cors");const express=require('express');const app=express(
     credentials: true
   })
 );
-require('dotenv').config();app.get('/',(_,res)=>res.send('OK'));app.listen(4000);
+
+/* ---------- Routes ---------- */
+app.get("/", (req, res) => {
+  res.send("OK");
+});
+
+app.get("/products", (req, res) => {
+  // temporary mock data (DB comes later)
+  res.json([]);
+});
+
+/* ---------- Start Server ---------- */
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log("Server running on port", PORT);
+});
