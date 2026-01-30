@@ -115,19 +115,37 @@ export default function App() {
      CLOUDINARY UPLOAD (ADMIN ONLY)
   ======================= */
   const uploadImage = async e => {
-    const file = e.target.files[0];
-    const data = new FormData();
-    data.append("file", file);
+  const file = e.target.files[0];
+  if (!file) return;
 
+  const data = new FormData();
+  data.append("image", file);
+
+  try {
     const res = await fetch(`${API}/upload`, {
       method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
       body: data
     });
 
+    if (!res.ok) {
+      throw new Error("Upload failed");
+    }
+
     const json = await res.json();
-    setForm({ ...form, image: json.url });
-  };
+
+    setForm(prev => ({
+      ...prev,
+      image: json.url
+    }));
+  } catch (err) {
+    console.error(err);
+    alert("Image upload failed");
+  }
+};
+
 
   /* =======================
      SAVE PRODUCT
